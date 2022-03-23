@@ -839,7 +839,7 @@ With SHALLOW update only todo state."
 (defun ejira--set-epic (item epic)
   "Set item ITEM to have epic EPIC. Refile accordingly."
   (message "item: '%s' epic: '%s'" item epic)
-  (jiralib2-update-issue item `(,"parent" . ,epic))
+  (jiralib2-update-issue item `(,ejira-epic-field . ,epic))
   (ejira--update-task item))
 
 (defun ejira--select-id-or-nil (prompt candidates)
