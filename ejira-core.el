@@ -223,7 +223,7 @@ The default value is applicable for:
      :assignee (ejira--alist-get item 'fields 'assignee 'displayName)
      :deadline (ejira--alist-get item 'fields 'duedate)
      :epic (unless (equal type ejira-epic-type-name)
-             (ejira--alist-get item 'fields ejira-epic-field))
+             (ejira--alist-get item 'fields 'parent 'key))
      :project (ejira--alist-get item 'fields 'project 'key)
      :estimate (ejira--alist-get item 'fields 'timetracking
                                  'originalEstimateSeconds)
@@ -388,6 +388,8 @@ If the issue heading does not exist, fallback to full update."
       (ejira--sort-comments key)
 
       ;; Finally, refile to the correct location
+      (message "Epic %s: %s" key epic)
+      (message "Parent %s: %s" key parent)
       (ejira--refile key (cond (parent) (epic) (t project)))
       (message "Updated %s: %s" key summary))))
 
@@ -837,7 +839,7 @@ With SHALLOW update only todo state."
 (defun ejira--set-epic (item epic)
   "Set item ITEM to have epic EPIC. Refile accordingly."
   (message "item: '%s' epic: '%s'" item epic)
-  (jiralib2-update-issue item `(,ejira-epic-field . ,epic))
+  (jiralib2-update-issue item `(,"parent" . ,epic))
   (ejira--update-task item))
 
 (defun ejira--select-id-or-nil (prompt candidates)
